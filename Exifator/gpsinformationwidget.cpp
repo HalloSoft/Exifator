@@ -64,6 +64,7 @@ void GpsInformationWidget::showLongitude(QExifImageHeader *imageHeader) const
     quint32 degree  = 0;
     quint32 minutes = 0;
     double  seconds = 0;
+    bool isValid = false;
 
     if(lingitudeVector.size() > 2)
     {
@@ -71,6 +72,7 @@ void GpsInformationWidget::showLongitude(QExifImageHeader *imageHeader) const
         minutes = lingitudeVector.at(1).first;
         seconds = lingitudeVector.at(2).first;
         seconds = seconds / lingitudeVector.at(2).second;
+        isValid = true;
     }
 
 
@@ -82,10 +84,30 @@ void GpsInformationWidget::showLongitude(QExifImageHeader *imageHeader) const
     QString displayString = QString("%1°%2'%3\"%4")
             .arg(degree).arg(minutes).arg(seconds).arg(lattitudeRefString);
 
-    ui->labelLongitude->setText(displayString);
+    if(isValid)
+        ui->labelLongitude->setText(displayString);
 }
 
 void GpsInformationWidget::showAltitude(QExifImageHeader *imageHeader) const
 {
+    if(!imageHeader)
+        return;
 
+    QExifValue altitudeValue = imageHeader->value(QExifImageHeader::GpsAltitude);
+    QVector<QExifURational> altitudeVector = altitudeValue.toRationalVector();
+
+    double altitude = 0;
+    bool isValid = false;
+
+    if(altitudeVector.size() > 0)
+    {
+        altitude = altitudeVector.at(0).first / altitudeVector.at(0).second;
+        isValid = true;
+    }
+
+    QExifValue altitudeRefValue = imageHeader->value(QExifImageHeader::GpsAltitudeRef);
+    QChar refValue = altitudeRefValue.toByte();
+
+    if(isValid)
+        ui->labelAltitude->setText(QString::number(altitude));
 }
