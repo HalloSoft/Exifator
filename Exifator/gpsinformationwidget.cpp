@@ -16,11 +16,13 @@ GpsInformationWidget::~GpsInformationWidget()
     delete ui;
 }
 
-void GpsInformationWidget::initialize(QExifImageHeader *imageHeader)
+void GpsInformationWidget::initialize(QExifImageHeader *imageHeader) const
 {
     showLatitude(imageHeader);
     showLongitude(imageHeader);
     showAltitude(imageHeader);
+    showDateStamp(imageHeader);
+    showTimeStamp(imageHeader);
 }
 
 void GpsInformationWidget::showLatitude(QExifImageHeader *imageHeader) const
@@ -61,11 +63,11 @@ void GpsInformationWidget::showLongitude(QExifImageHeader *imageHeader) const
 
     QExifValue longitudeValue = imageHeader->value(QExifImageHeader::GpsLongitude);
     QVector<QExifURational> lingitudeVector = longitudeValue.toRationalVector();
+
     quint32 degree  = 0;
     quint32 minutes = 0;
     double  seconds = 0;
     bool isValid = false;
-
     if(lingitudeVector.size() > 2)
     {
         degree = lingitudeVector.at(0).first;
@@ -101,13 +103,49 @@ void GpsInformationWidget::showAltitude(QExifImageHeader *imageHeader) const
 
     if(altitudeVector.size() > 0)
     {
-        altitude = altitudeVector.at(0).first / altitudeVector.at(0).second;
+        altitude = (double)altitudeVector.at(0).first / altitudeVector.at(0).second;
         isValid = true;
     }
 
-    QExifValue altitudeRefValue = imageHeader->value(QExifImageHeader::GpsAltitudeRef);
-    QChar refValue = altitudeRefValue.toByte();
-
     if(isValid)
         ui->labelAltitude->setText(QString::number(altitude));
+}
+
+void GpsInformationWidget::showDateStamp(QExifImageHeader *imageHeader) const
+{
+    if(!imageHeader)
+        return;
+
+    QExifValue dateValue = imageHeader->value(QExifImageHeader::GpsDateStamp);
+
+    if(!dateValue.isNull())
+        ui->labelDateStamp->setText(dateValue.toString());
+}
+
+void GpsInformationWidget::showTimeStamp(QExifImageHeader *imageHeader) const
+{
+    if(!imageHeader)
+        return;
+
+    QExifValue timeValue = imageHeader->value(QExifImageHeader::GpsTimeStamp);
+    QVector<QExifURational> timeVector = timeValue.toRationalVector();
+
+    quint32 hours   = 0;
+    quint32 minutes = 0;
+    double  seconds = 0;
+    bool isValid = false;
+
+    if(timeVector.size() > 2)
+    {
+        hours = timeVector.at(0).first;
+        minutes = timeVector.at(1).first;
+        seconds = (double)timeVector.at(2).first / timeVector.at(2).second;
+        isValid = true;
+    }
+
+    if(isValid)
+    {
+        QString timeFormat = QString("%1:%2:%3").arg(hours).arg(minutes).arg(seconds);
+        ui->labelTimeStamp->setText(timeFormat);
+    }
 }

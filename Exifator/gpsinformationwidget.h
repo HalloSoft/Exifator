@@ -17,7 +17,7 @@ public:
     explicit GpsInformationWidget(QWidget *parent = 0);
     ~GpsInformationWidget();
 
-    void initialize(QExifImageHeader* imageHeader);
+    void initialize(QExifImageHeader* imageHeader) const;
 
 private:
     Ui::GpsInformationWidget *ui;
@@ -25,6 +25,8 @@ private:
     void showLatitude(QExifImageHeader* imageHeader) const;
     void showLongitude(QExifImageHeader *imageHeader) const;
     void showAltitude(QExifImageHeader *imageHeader) const;
+    void showDateStamp(QExifImageHeader *imageHeader) const;
+    void showTimeStamp(QExifImageHeader *imageHeader) const;
 };
 
 #endif // GPSINFORMATIONWIDGET_H
