@@ -6,8 +6,9 @@
 
 #include <QDebug>
 #include <QFileDialog>
+#include <QtQuickWidgets/QQuickWidget>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(const QString &filePath, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     exif(0), header(0)
@@ -17,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
     bool isConnected = false; Q_UNUSED(isConnected);
     isConnected = connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));   Q_ASSERT(isConnected);
 
+    if(!filePath.isEmpty())
+        openFile(filePath);
+
 }
 
 MainWindow::~MainWindow()
@@ -25,21 +29,24 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::openFile()
+void MainWindow::openFile(QString filePathName)
 {
-    QString fileName = QFileDialog::getOpenFileName(this);
-    exif = new(std::nothrow) QMetaData(fileName, this, ui->textEditresult);
+    if(filePathName.isEmpty())
+        filePathName = QFileDialog::getOpenFileName(this);
+
+    exif = new(std::nothrow) QMetaData(filePathName, this, ui->textEditresult);
 
     foreach(QString entry, exif->keyWordList())
         qDebug() << entry;
 
     setThumbNail();
-
-
 }
 
 void MainWindow::setThumbNail()
 {
+    if(!exif)
+        return;
+
     QList<QExifImageHeader *> *headers = exif->exifImageHeaderList();
 
     QImage thumbNail;

@@ -15,10 +15,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(const QString& filePath = QString(), QWidget *parent = 0);
     ~MainWindow();
 private slots:
-    void openFile();
+    void openFile(QString filePathName = QString());
 private:
     void setThumbNail();
     Ui::MainWindow *ui;

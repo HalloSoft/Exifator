@@ -4,11 +4,17 @@
 #include "qexifimageheader.h"
 #include "gpsinformationwidget.h"
 
+#include <QQuickWidget>
+
 GpsInformationWidget::GpsInformationWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GpsInformationWidget)
 {
     ui->setupUi(this);
+
+    _qmlWidget = new QQuickWidget(this);
+    _qmlWidget->setSource(QUrl::fromLocalFile("MapView.qml"));
+
 }
 
 GpsInformationWidget::~GpsInformationWidget()
@@ -18,6 +24,10 @@ GpsInformationWidget::~GpsInformationWidget()
 
 void GpsInformationWidget::initialize(QExifImageHeader *imageHeader) const
 {
+    QGridLayout *mainLayout = dynamic_cast<QGridLayout *>( ui->groupBox->layout());
+    if(mainLayout)
+        mainLayout->addWidget(_qmlWidget, 5, 0, 1, 2);
+
     showLatitude(imageHeader);
     showLongitude(imageHeader);
     showAltitude(imageHeader);

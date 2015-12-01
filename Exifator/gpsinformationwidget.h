@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QExifImageHeader;
+class QQuickWidget;
 
 namespace Ui {
 class GpsInformationWidget;
@@ -27,6 +28,8 @@ private:
     void showAltitude(QExifImageHeader *imageHeader) const;
     void showDateStamp(QExifImageHeader *imageHeader) const;
     void showTimeStamp(QExifImageHeader *imageHeader) const;
+
+    QQuickWidget *_qmlWidget;
 };
 
 #endif // GPSINFORMATIONWIDGET_H
