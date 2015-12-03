@@ -55,28 +55,28 @@ void MainWindow::setThumbNail()
     {
         header = headers->at(0);
         QList<QExifImageHeader::GpsTag>gpsTags = header->gpsTags();
-        qDebug() << "Number of GPS-Tags" << gpsTags.count();
+        //qDebug() << "Number of GPS-Tags" << gpsTags.count();
 
         ui->gpsWidget->initialize(header);
 
-        foreach(QExifImageHeader::GpsTag gpsTag, gpsTags)
-        {
-            QExifValue exifValue = header->value(gpsTag);
-            if(!exifValue.isNull())
-                qDebug() << "Gps-Tag:" << QMetaData::tagToText(gpsTag)
-                         << "\tValue:" << exifValue.toString() << "\tType:" << exifValue.type();
-            else
-                qDebug() << "Gps-Tag:" << QMetaData::tagToText(gpsTag) << "is null";
+//        foreach(QExifImageHeader::GpsTag gpsTag, gpsTags)
+//        {
+//            QExifValue exifValue = header->value(gpsTag);
+//            if(!exifValue.isNull())
+//                qDebug() << "Gps-Tag:" << QMetaData::tagToText(gpsTag)
+//                         << "\tValue:" << exifValue.toString() << "\tType:" << exifValue.type();
+//            else
+//                qDebug() << "Gps-Tag:" << QMetaData::tagToText(gpsTag) << "is null";
 
-            if(exifValue.type() == QExifValue::Rational)
-            {
-                QVector<QExifURational> vector = exifValue.toRationalVector();
-                foreach(QExifURational rat, vector)
-                {
-                    qDebug() << "-----------" <<rat.first << rat.second;
-                }
-            }
-        }
+//            if(exifValue.type() == QExifValue::Rational)
+//            {
+//                QVector<QExifURational> vector = exifValue.toRationalVector();
+//                foreach(QExifURational rat, vector)
+//                {
+//                    qDebug() << "-----------" <<rat.first << rat.second;
+//                }
+//            }
+//        }
 
         // show Thumbnail
         thumbNail = headers->at(0)->thumbnail();
@@ -84,5 +84,5 @@ void MainWindow::setThumbNail()
     else
         qDebug() << "No Exif-Header found";
 
-    ui->labelThumbnail->setPixmap(QPixmap::fromImage(thumbNail));
+    //ui->labelThumbnail->setPixmap(QPixmap::fromImage(thumbNail));
 }

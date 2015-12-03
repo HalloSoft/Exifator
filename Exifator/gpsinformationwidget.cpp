@@ -4,6 +4,7 @@
 #include "qexifimageheader.h"
 #include "gpsinformationwidget.h"
 
+#include <QDebug>
 #include <QQuickWidget>
 
 GpsInformationWidget::GpsInformationWidget(QWidget *parent) :
@@ -13,7 +14,8 @@ GpsInformationWidget::GpsInformationWidget(QWidget *parent) :
     ui->setupUi(this);
 
     _qmlWidget = new QQuickWidget(this);
-    _qmlWidget->setSource(QUrl::fromLocalFile("MapView.qml"));
+    _qmlWidget->setSource(QUrl("qrc:///file/MapView.qml"));
+    _qmlWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
 }
 
@@ -27,6 +29,10 @@ void GpsInformationWidget::initialize(QExifImageHeader *imageHeader) const
     QGridLayout *mainLayout = dynamic_cast<QGridLayout *>( ui->groupBox->layout());
     if(mainLayout)
         mainLayout->addWidget(_qmlWidget, 5, 0, 1, 2);
+
+#ifdef QT_DEBUG
+    qDebug() << "QtQuick-Item-Staus" << _qmlWidget->status();
+#endif
 
     showLatitude(imageHeader);
     showLongitude(imageHeader);
@@ -54,11 +60,8 @@ void GpsInformationWidget::showLatitude(QExifImageHeader *imageHeader) const
         seconds = seconds / latitudeVector.at(2).second;
     }
 
-
     QExifValue latitudeRefValue = imageHeader->value(QExifImageHeader::GpsLatitudeRef);
     QString latitudeRefString = latitudeRefValue.toString();
-
-
 
     QString displayString = QString("%1°%2'%3\"%4")
             .arg(degree).arg(minutes).arg(seconds).arg(latitudeRefString);

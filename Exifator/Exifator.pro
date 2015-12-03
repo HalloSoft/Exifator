@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui quickwidgets
+QT       += core gui quickwidgets location qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,3 +28,6 @@ FORMS    += mainwindow.ui \
 
 DISTFILES += \
     MapView.qml
+
+RESOURCES += \
+    qmlfiles.qrc

@@ -1,2 +1,5 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/file">
+        <file>MapView.qml</file>
+    </qresource>
+</RCC>
