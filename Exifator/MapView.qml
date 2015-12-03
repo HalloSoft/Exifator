@@ -6,7 +6,7 @@ import QtLocation 5.5
 
 Rectangle {
     //width: 360
-    height: 300
+    height: 400
 
     Plugin {
         id: myPlugin
@@ -35,15 +35,14 @@ Rectangle {
         }
     }
 
-    property variant locationOslo: QtPositioning.coordinate( 59.93, 10.76)
-    property variant locationPforzheim: QtPositioning.coordinate( 48.53, 8.41)
+    property variant locationPforzheim: QtPositioning.coordinate( 48.88, 8.68)
 
     PlaceSearchModel {
         id: searchModel
 
         plugin: myPlugin
 
-        searchTerm: "Pizza"
+        searchTerm: "Stöber"
         searchArea: QtPositioning.circle(locationPforzheim)
 
         Component.onCompleted: update()

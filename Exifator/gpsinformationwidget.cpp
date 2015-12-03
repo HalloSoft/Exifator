@@ -9,7 +9,8 @@
 
 GpsInformationWidget::GpsInformationWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::GpsInformationWidget)
+    ui(new Ui::GpsInformationWidget),
+    _qmlWidget(0)
 {
     ui->setupUi(this);
 
@@ -27,11 +28,13 @@ GpsInformationWidget::~GpsInformationWidget()
 void GpsInformationWidget::initialize(QExifImageHeader *imageHeader) const
 {
     QGridLayout *mainLayout = dynamic_cast<QGridLayout *>( ui->groupBox->layout());
-    if(mainLayout)
+    if(mainLayout && _qmlWidget)
         mainLayout->addWidget(_qmlWidget, 5, 0, 1, 2);
 
 #ifdef QT_DEBUG
-    qDebug() << "QtQuick-Item-Staus" << _qmlWidget->status();
+    if(_qmlWidget) qDebug() << "QtQuick-Item-Staus" << _qmlWidget->status();
+    else           qDebug() << "There is no QtQuick-Item";
+
 #endif
 
     showLatitude(imageHeader);

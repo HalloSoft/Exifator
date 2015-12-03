@@ -84,5 +84,5 @@ void MainWindow::setThumbNail()
     else
         qDebug() << "No Exif-Header found";
 
-    //ui->labelThumbnail->setPixmap(QPixmap::fromImage(thumbNail));
+    ui->labelThumbnail->setPixmap(QPixmap::fromImage(thumbNail));
 }
